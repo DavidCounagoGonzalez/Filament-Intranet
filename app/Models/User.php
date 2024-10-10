@@ -50,7 +50,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function country(){
         return $this->belongsTo(Country::class);
+    }
+
+    public function calendars(){
+        return $this->belongsToMany(Calendar::class);
+    }
+
+    public function departments(){
+        return $this->belongsToMany(Department::class);
+    }
+
+    public function holidays(){
+        return $this->hasMany(Holiday::class);
+    }
+
+    public function timesheets(){
+        return $this->hasMany(Timesheet::class);
     }
 }
