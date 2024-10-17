@@ -3,6 +3,7 @@
 namespace App\Filament\Personal\Resources\HolidayResource\Pages;
 
 use App\Filament\Personal\Resources\HolidayResource;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,9 @@ class CreateHoliday extends CreateRecord
     {
         $data['user_id'] = Auth::user()->id;
         $data['type'] = 'pending';
+
+        $userAdmin = User::find(1);
+
 
         return $data;
     }
