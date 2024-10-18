@@ -30,6 +30,6 @@ class TestEmails extends Command
     {
         //
         $user = User::find(1);
-        Mail::to($user)->send(new HolidayPending);
+        Mail::to($user)->send(new HolidayPending());
     }
 }

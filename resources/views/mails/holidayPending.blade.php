@@ -1,1 +1,6 @@
-<h1>HOLA</h1>
+<h1>Solicitud de vacaciones</h1>
+
+<p>El empleado {{ $data['name'] }} con correo {{ $data['email'] }}
+    ha solicitado el siguiente día de vacaciones:
+</p>
+<p><strong> {{ $data['day'] }} </strong></p>
