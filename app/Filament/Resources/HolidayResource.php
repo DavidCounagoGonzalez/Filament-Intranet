@@ -6,6 +6,7 @@ use App\Filament\Resources\HolidayResource\Pages;
 use App\Filament\Resources\HolidayResource\RelationManagers;
 use App\Models\Holiday;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -25,6 +26,7 @@ class HolidayResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+
             ->schema([
                 Forms\Components\Select::make('calendar_id')
                     ->relationship(name: 'calendar', titleAttribute: 'name')
@@ -59,7 +61,7 @@ class HolidayResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
                         'approved' => 'success',
                         'declined' => 'danger',
@@ -76,11 +78,11 @@ class HolidayResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('type')
-                ->options([
-                    'declined' => 'Decline',
-                    'approved' => 'Approve',
-                    'pending' => 'Pending'
-                ]),
+                    ->options([
+                        'declined' => 'Decline',
+                        'approved' => 'Approve',
+                        'pending' => 'Pending'
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
