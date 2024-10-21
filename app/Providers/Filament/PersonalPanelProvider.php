@@ -55,6 +55,9 @@ class PersonalPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ]);
     }
 }

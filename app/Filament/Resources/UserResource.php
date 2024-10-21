@@ -18,7 +18,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -47,42 +47,47 @@ class UserResource extends Resource
                             ->required(),
                     ]),
                 Section::make('Address Info')
-                ->columns(3)
-                ->schema([
-                    Forms\Components\Select::make('country_id')
-                    ->relationship(name : 'country', titleAttribute:'name')
-                    ->searchable()
-                    ->preload()
-                    ->live()
-                    ->afterStateUpdated(function (Set $set){
-                        $set('state_id',null);
-                        $set('city_id', null);
-                    } )
-                    ->required(),
-                    Forms\Components\Select::make('state_id')
-                    ->options(fn (Get $get): Collection => State::query()
-                        ->where('country_id', $get('country_id'))
-                        ->pluck('name', 'id'))
-                    ->searchable()
-                    ->preload()
-                    ->live()
-                    ->afterStateUpdated(function (Set $set){
-                        $set('city_id', null);
-                    } )
-                    ->required(),
-                    Forms\Components\Select::make('city_id')
-                    ->options(fn (Get $get): Collection => City::query()
-                        ->where('state_id', $get('state_id'))
-                        ->pluck('name', 'id'))
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                    Forms\Components\TextInput::make('address')
-                    ->required(),
-                    Forms\Components\TextInput::make('postal_code')
-                    ->required(),
-                ])
-                
+                    ->columns(3)
+                    ->schema([
+                        Forms\Components\Select::make('country_id')
+                            ->relationship(name: 'country', titleAttribute: 'name')
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('state_id', null);
+                                $set('city_id', null);
+                            })
+                            ->required(),
+                        Forms\Components\Select::make('state_id')
+                            ->options(fn(Get $get): Collection => State::query()
+                                ->where('country_id', $get('country_id'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('city_id', null);
+                            })
+                            ->required(),
+                        Forms\Components\Select::make('city_id')
+                            ->options(fn(Get $get): Collection => City::query()
+                                ->where('state_id', $get('state_id'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                        Forms\Components\TextInput::make('address')
+                            ->required(),
+                        Forms\Components\TextInput::make('postal_code')
+                            ->required(),
+                        Forms\Components\Select::make('role')
+                            ->label('Rol')
+                            ->options(Role::all()->pluck('name', 'name')) // Trae los roles desde la tabla roles
+                            ->required()
+                            ->default('panel_user')
+                    ])
+
             ]);
     }
 
@@ -97,15 +102,15 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault:false),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('postal_code')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault:false),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault:true),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -114,6 +119,7 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('roles.name')->label('Rol'),
             ])
             ->filters([
                 //
